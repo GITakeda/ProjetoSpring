@@ -13,4 +13,5 @@ public interface MateriaRepository extends JpaRepository<Materia, Long> {
 
     Optional<Materia> findByActiveAndId(Boolean active, Long id);
 
+    boolean existsByIdAndActive(Long id, Boolean active);
 }

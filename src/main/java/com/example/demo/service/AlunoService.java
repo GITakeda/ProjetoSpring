@@ -53,7 +53,7 @@ public class AlunoService {
     }
 
     public Long save(AlunoDTO alunoDTO, Long id) throws NotFoundException{
-        if(!alunoRepository.existsById(id)){
+        if(!alunoRepository.existsByIdAndActive(id, Boolean.TRUE)){
             //throw new Exception("Aluno não encontrado");
             throw new NotFoundException("Aluno não encontrado");
         }
@@ -65,11 +65,11 @@ public class AlunoService {
         return id;
     }
 
-    public boolean deleteById(Long id){
+    public boolean deleteById(Long id) throws NotFoundException{
         Optional<Aluno> aluno = alunoRepository.findByActiveAndId(Boolean.TRUE, id);
 
         if(aluno.isEmpty()){
-            return false;
+            throw new NotFoundException("Aluno não encontrado");
         }
 
         aluno.get().setActive(Boolean.FALSE);

@@ -44,10 +44,7 @@ public class MentorController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
-        if(mentorService.deleteById(id)){
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.notFound().build();
+        mentorService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

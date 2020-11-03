@@ -47,11 +47,7 @@ public class ProgramaController{
 
     @DeleteMapping("/{id}")
     public ResponseEntity deletePrograma(@PathVariable Long id){
-        if(programaService.deleteById(id)){
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.notFound().build();
-
+        programaService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

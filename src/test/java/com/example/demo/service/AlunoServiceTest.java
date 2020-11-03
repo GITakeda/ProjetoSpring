@@ -22,19 +22,19 @@ import java.util.Optional;
 public class AlunoServiceTest {
 
     @Mock
-    AlunoRepository alunoRepository;
+    private AlunoRepository alunoRepository;
 
     @Mock
-    ProgramaService programaService;
+    private ProgramaService programaService;
 
     @Mock
-    AlunoMapper alunoMapper;
+    private AlunoMapper alunoMapper;
 
     @InjectMocks
-    AlunoService alunoService;
+    private AlunoService alunoService;
 
     @Test
-    public void testGetAluno() {
+    public void testGetAlunoComAlunoExistente() {
         Long id = 1l;
 
         ProgramaDTO programaDTO = new ProgramaDTO(id, "nome", "ano");
@@ -49,6 +49,22 @@ public class AlunoServiceTest {
         AlunoDTO alunoDTORetorno = alunoService.findById(id);
 
         compareAluno(alunoDTO, alunoDTORetorno);
+    }
+
+    @Test
+    public void testGetAlunoComAlunoInexistente() {
+        Long id = 1l;
+
+        ProgramaDTO programaDTO = new ProgramaDTO(id, "nome", "ano");
+        AlunoDTO alunoDTO = new AlunoDTO(id, "AlunoTeste", "Teste", programaDTO);
+
+        Programa programa = new Programa(id, programaDTO.getNome(), programaDTO.getAno(), Boolean.TRUE);
+        Aluno aluno = new Aluno(id, programa, alunoDTO.getClasse(), alunoDTO.getNome(), Boolean.TRUE);
+
+
+        Mockito.when(alunoRepository.findByActiveAndId(Boolean.TRUE, id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> alunoService.findById(id));
     }
 
     @Test
@@ -67,12 +83,14 @@ public class AlunoServiceTest {
         List<Aluno> alunos = List.of(aluno1, aluno2);
         List<AlunoDTO> alunoDTOS = List.of(alunoDTO1, alunoDTO2);
         Mockito.when(alunoRepository.findAllByActive(Boolean.TRUE)).thenReturn(alunos);
+        Mockito.when(alunoMapper.toAlunoDTO(aluno1)).thenReturn(alunoDTO1);
+        Mockito.when(alunoMapper.toAlunoDTO(aluno2)).thenReturn(alunoDTO2);
 
         List<AlunoDTO> alunosRetorno = alunoService.getAlunos();
 
-        int i = 0;
-
         Assertions.assertEquals(alunos.size(), alunosRetorno.size());
+
+        int i = 0;
 
         while(i < alunos.size()){
             compareAluno(alunoDTOS.get(i), alunosRetorno.get(i));

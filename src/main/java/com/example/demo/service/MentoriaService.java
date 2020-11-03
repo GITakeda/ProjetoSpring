@@ -7,6 +7,7 @@ import com.example.demo.dto.mapper.AlunoMapper;
 import com.example.demo.dto.mapper.MentorMapper;
 import com.example.demo.dto.mapper.MentoriaMapper;
 import com.example.demo.exception.NotFoundException;
+import com.example.demo.exception.WrongArgumentException;
 import com.example.demo.model.Mentoria;
 import com.example.demo.repository.MentoriaRepository;
 import org.mapstruct.factory.Mappers;
@@ -43,11 +44,11 @@ public class MentoriaService {
         return mentoriaRepository.findAllByActive(Boolean.TRUE).parallelStream().map(mapper::toMentoriaDTO).collect(Collectors.toList());
     }
 
-    public Long save(MentoriaDTO mentoriaDTO) throws NotFoundException{
+    public Long save(MentoriaDTO mentoriaDTO) throws WrongArgumentException{
         Mentoria mentoria = mapper.toMentoria(mentoriaDTO);
 
         if(mentoriaRepository.findByActiveAndAluno_Id(Boolean.TRUE, mentoriaDTO.getAluno_id()).isPresent()){
-            throw new NotFoundException("Mentoria não criada");
+            throw new WrongArgumentException("Mentoria não criada");
         }
 
         mentoria = mentoriaRepository.save(mentoria);
@@ -62,9 +63,12 @@ public class MentoriaService {
 
         Mentoria mentoria = mapper.toMentoria(mentoriaDTO);
 
-        if(!mentoriaRepository.existsByActiveAndId(Boolean.TRUE, id) ||
-                mentoriaRepository.findByActiveAndAluno_Id(Boolean.TRUE, mentoriaDTO.getAluno_id()).isPresent()){
+        if(!mentoriaRepository.existsByActiveAndId(Boolean.TRUE, id)){
             throw new NotFoundException("Mentoria não encontrada");
+        }
+
+        if(mentoriaRepository.findIgual(mentoriaDTO.getAluno_id(), id).isPresent()){
+            throw new WrongArgumentException("Mentoria já criada para o aluno inserido");
         }
 
         mentoriaRepository.save(mentoria);
@@ -84,9 +88,9 @@ public class MentoriaService {
         inativar(mentoriaRepository.findByActiveAndMentor_Id(Boolean.TRUE, mentorDTO.getId()));
     }
 
-    private boolean inativar(Optional<Mentoria> mentoria){
+    private boolean inativar(Optional<Mentoria> mentoria) throws NotFoundException{
         if(mentoria.isEmpty()){
-            return false;
+            throw new NotFoundException("Mentoria não encontrada");
         }
 
         mentoria.get().setActive(Boolean.FALSE);

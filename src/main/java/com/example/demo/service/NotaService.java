@@ -72,7 +72,7 @@ public class NotaService {
 
         Optional<Nota> notaOptional = Optional.of(mapper.toNota(notaDTO));
 
-        if(!notaRepository.existsById(id) || notaOptional.isEmpty()){
+        if(!notaRepository.existsByIdAndActive(id, Boolean.TRUE) || notaOptional.isEmpty()){
             throw new WrongArgumentException("Nota com informações incorretas");
         }
 
@@ -121,9 +121,9 @@ public class NotaService {
         return true;
     }
 
-    private boolean inativar(Optional<Nota> notaOptional){
+    private boolean inativar(Optional<Nota> notaOptional) throws NotFoundException{
         if(notaOptional.isEmpty()){
-            return false;
+            throw new NotFoundException("Nota não encontrada");
         }
 
         notaOptional.get().setActive(Boolean.FALSE);

@@ -48,11 +48,8 @@ public class MentoriaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id){
-        if(mentoriaService.delete(id)){
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.notFound().build();
+        mentoriaService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

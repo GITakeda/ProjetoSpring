@@ -55,9 +55,7 @@ public class MateriaService {
     public Long save(MateriaDTO materiaDTO, Long id) throws NotFoundException{
         materiaDTO.setId(id);
 
-        Optional<Materia> materia = materiaRepository.findByActiveAndId(Boolean.TRUE, id);
-
-        if(materia.isEmpty()){
+        if(!materiaRepository.existsByIdAndActive(id, Boolean.TRUE)){
             throw new NotFoundException("Materia não encontrada");
         }
 
@@ -70,11 +68,11 @@ public class MateriaService {
         return novaMateria.getId();
     }
 
-    public boolean deleteById(Long id){
+    public boolean deleteById(Long id) throws NotFoundException{
         Optional<Materia> materia = materiaRepository.findByActiveAndId(Boolean.TRUE, id);
 
         if(materia.isEmpty()){
-            return false;
+            throw new NotFoundException("Materia não encotnrada");
         }
 
         materia.get().setActive(Boolean.FALSE);

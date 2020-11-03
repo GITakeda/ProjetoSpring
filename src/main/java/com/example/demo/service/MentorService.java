@@ -45,7 +45,7 @@ public class MentorService {
     }
 
     public Long save(MentorDTO mentorDTO, Long id) throws NotFoundException{
-        if(!mentorRepository.existsById(id)){
+        if(!mentorRepository.existsByIdAndActive(id, Boolean.TRUE)){
             throw new NotFoundException("Mentor não encontrado");
         }
 
@@ -58,11 +58,11 @@ public class MentorService {
         return mentorDTO.getId();
     }
 
-    public boolean deleteById(Long id) {
+    public boolean deleteById(Long id) throws NotFoundException{
         Optional<Mentor> mentor = mentorRepository.findByActiveAndId(Boolean.TRUE, id);
 
         if(mentor.isEmpty()){
-           return false;
+           throw new NotFoundException("Mentor não encontrado");
         }
 
         mentor.get().setActive(Boolean.FALSE);

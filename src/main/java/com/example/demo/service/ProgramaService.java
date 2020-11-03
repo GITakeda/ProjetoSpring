@@ -48,7 +48,7 @@ public class ProgramaService {
     }
 
     public Long save(ProgramaDTO programaDTO, Long id) throws NotFoundException {
-        if(!programaRepository.existsById(id)){
+        if(!programaRepository.existsByIdAndActive(id, Boolean.TRUE)){
             throw new NotFoundException("Programa não encontrado");
         }
 
@@ -63,11 +63,11 @@ public class ProgramaService {
         return programaDTO.getId();
     }
 
-    public boolean deleteById(Long id) {
+    public boolean deleteById(Long id) throws NotFoundException{
         Optional<Programa> programa = programaRepository.findByActiveAndId(Boolean.TRUE, id);
 
         if(programa.isEmpty()){
-           return false;
+           throw new NotFoundException("Programa não encontrado");
         }
 
         if(alunoService.getAlunosByPrograma(id).size() > 0){

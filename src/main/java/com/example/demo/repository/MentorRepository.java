@@ -10,4 +10,5 @@ public interface MentorRepository extends JpaRepository<Mentor, Long> {
     Optional<Mentor> findByActiveAndId(Boolean active, Long id);
 
     List<Mentor> findAllByActive(Boolean active);
+    boolean existsByIdAndActive(Long id, Boolean active);
 }

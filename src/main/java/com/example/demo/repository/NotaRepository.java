@@ -21,4 +21,6 @@ public interface NotaRepository extends JpaRepository<Nota, Long> {
     List<Nota> findAllByActiveAndMentoria_id(Boolean active, Long mentoria_id);
 
     List<Nota> findAllByActiveAndMateria_id(Boolean active, Long materia_id);
+
+    boolean existsByIdAndActive(Long id, Boolean active);
 }

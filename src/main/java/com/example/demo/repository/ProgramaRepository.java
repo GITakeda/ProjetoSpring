@@ -12,4 +12,6 @@ public interface ProgramaRepository extends JpaRepository<Programa, Long> {
     Optional<Programa> findByActiveAndId(Boolean active, Long id);
 
     List<Programa> findAllByActive(Boolean active);
+
+    boolean existsByIdAndActive(Long id, Boolean active);
 }

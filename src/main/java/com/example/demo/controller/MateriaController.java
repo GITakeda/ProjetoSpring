@@ -44,10 +44,7 @@ public class MateriaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id){
-        if(materiaService.deleteById(id)){
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.notFound().build();
+        materiaService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

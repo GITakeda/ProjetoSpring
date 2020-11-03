@@ -58,10 +58,7 @@ public class NotaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id){
-        if(!notaService.delete(id)){
-            return ResponseEntity.notFound().build();
-        }
-
+        notaService.delete(id);
         return ResponseEntity.noContent().build();
     }
 

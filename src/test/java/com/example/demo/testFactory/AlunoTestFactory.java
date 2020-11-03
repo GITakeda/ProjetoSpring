@@ -7,16 +7,18 @@ import com.example.demo.model.Programa;
 
 public class AlunoTestFactory {
 
-    public static Aluno createAluno(Long id, Programa programa, String classe, String nome, Boolean active){
-        Aluno aluno = new Aluno(id, programa, classe, nome, active);
+    public static Aluno createAluno(Long id){
+        Programa programa = new Programa(id, "nome", "ano", Boolean.TRUE);
+        Aluno aluno = new Aluno(id, programa, "Teste", "AlunoTeste",Boolean.TRUE);
 
         return aluno;
     }
 
-    public static AlunoDTO createAlunoDTO(Long id, String nome, String classe, ProgramaDTO programaDTO){
-        AlunoDTO alunoDTO = new AlunoDTO(id, nome, classe, programaDTO);
+    public static AlunoDTO createAlunoDTO(Long id){
+        ProgramaDTO programa = new ProgramaDTO(id, "nome", "ano");
+        AlunoDTO aluno = new AlunoDTO(id, "AlunoTeste", "Teste", programa);
 
-        return alunoDTO;
+        return aluno;
     }
 
 }

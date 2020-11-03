@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.MateriaDTO;
 import com.example.demo.dto.mapper.MateriaMapper;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.Materia;
 import com.example.demo.repository.MateriaRepository;
 import org.junit.jupiter.api.Assertions;
@@ -19,25 +20,40 @@ import java.util.Optional;
 public class MateriaServiceTest {
 
     @Mock
-    MateriaRepository materiaRepository;
+    private MateriaRepository materiaRepository;
 
     @Mock
-    MateriaMapper materiaMapperMock;
+    private MateriaMapper materiaMapper;
+
+    @Mock
+    private NotaService notaService;
 
     @InjectMocks
-    MateriaService materiaService;
+    private MateriaService materiaService;
 
     @Test
-    public void testGetMateria(){
+    public void testGetMateriaComMateriaExistente(){
         Long id = 1L;
 
         MateriaDTO materiaDTO = new MateriaDTO(id, "nome", "descricao");
         Materia materia = new Materia(id, "nome", "descricao", Boolean.TRUE);
 
         Mockito.when(materiaRepository.findByActiveAndId(Boolean.TRUE, id)).thenReturn(Optional.of(materia));
-        Mockito.when(materiaMapperMock.toMateriaDTO(materia)).thenReturn(materiaDTO);
+        Mockito.when(materiaMapper.toMateriaDTO(materia)).thenReturn(materiaDTO);
 
         compareMateria(materiaDTO, materiaService.findById(id));
+    }
+
+    @Test
+    public void testGetMateriaComMateriaInexistente(){
+        Long id = 1L;
+
+        MateriaDTO materiaDTO = new MateriaDTO(id, "nome", "descricao");
+        Materia materia = new Materia(id, "nome", "descricao", Boolean.TRUE);
+
+        Mockito.when(materiaRepository.findByActiveAndId(Boolean.TRUE, id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> materiaService.findById(id));
     }
 
     @Test
@@ -54,8 +70,8 @@ public class MateriaServiceTest {
             List<Materia> materias = List.of(materia1, materia2);
             List<MateriaDTO> materiaDTOS = List.of(materiaDTO1, materiaDTO2);
             Mockito.when(materiaRepository.findAllByActive(Boolean.TRUE)).thenReturn(materias);
-            Mockito.when(materiaMapperMock.toMateriaDTO(materia1)).thenReturn(materiaDTO1);
-            Mockito.when(materiaMapperMock.toMateriaDTO(materia2)).thenReturn(materiaDTO2);
+            Mockito.when(materiaMapper.toMateriaDTO(materia1)).thenReturn(materiaDTO1);
+            Mockito.when(materiaMapper.toMateriaDTO(materia2)).thenReturn(materiaDTO2);
             List<MateriaDTO> materiasRetorno = materiaService.findAll();
 
             int i = 0;
@@ -71,8 +87,76 @@ public class MateriaServiceTest {
         }
     }
 
+    @Test
     public void testGravarMateria(){
+        Long id = 1L;
 
+        MateriaDTO materiaDTO = new MateriaDTO(id, "nome", "descricao");
+        Materia materia = new Materia(id, "nome", "descricao", Boolean.TRUE);
+
+        Mockito.when(materiaMapper.toMateria(materiaDTO)).thenReturn(materia);
+        Mockito.when(materiaRepository.save(materia)).thenReturn(materia);
+
+        Long retorno = materiaService.save(materiaDTO);
+
+        Assertions.assertEquals(id, retorno);
+    }
+
+    @Test
+    public void testAlterarMateriaComMateriaInexistente(){
+        Long id = 1L;
+
+        MateriaDTO materiaDTO = new MateriaDTO(id, "nome", "descricao");
+        Materia materia = new Materia(id, "nome", "descricao", Boolean.TRUE);
+
+        MateriaDTO materiaDTOAlterado = new MateriaDTO(id, "nome", "descricao");
+        Materia materiaAlterado = new Materia(id, "nome", "descricao", Boolean.TRUE);
+
+        Mockito.when(materiaRepository.findByActiveAndId(Boolean.TRUE, id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> materiaService.save(materiaDTOAlterado, id));
+    }
+
+    @Test
+    public void testAlterarMateriaComMateriaExistente(){
+        Long id = 1L;
+
+        MateriaDTO materiaDTO = new MateriaDTO(id, "nome", "descricao");
+        Materia materia = new Materia(id, "nome", "descricao", Boolean.TRUE);
+
+        MateriaDTO materiaDTOAlterado = new MateriaDTO(id, "nome", "descricao");
+        Materia materiaAlterado = new Materia(id, "nome", "descricao", Boolean.TRUE);
+
+        Mockito.when(materiaRepository.findByActiveAndId(Boolean.TRUE, id)).thenReturn(Optional.of(materia));
+        Mockito.when(materiaMapper.toMateria(materiaDTOAlterado)).thenReturn(materiaAlterado);
+
+        Long retorno = materiaService.save(materiaDTOAlterado, id);
+
+        Assertions.assertEquals(id, retorno);
+    }
+
+    @Test
+    public void testDeleteMateriaComMateriaInexistente(){
+        Long id = 1L;
+
+        MateriaDTO materiaDTO = new MateriaDTO(id, "nome", "descricao");
+        Materia materia = new Materia(id, "nome", "descricao", Boolean.TRUE);
+
+        Mockito.when(materiaRepository.findByActiveAndId(Boolean.TRUE, id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> materiaService.deleteById(id));
+    }
+
+    @Test
+    public void testDeleteMateriaComMateriaExistente(){
+        Long id = 1L;
+
+        MateriaDTO materiaDTO = new MateriaDTO(id, "nome", "descricao");
+        Materia materia = new Materia(id, "nome", "descricao", Boolean.TRUE);
+
+        Mockito.when(materiaRepository.findByActiveAndId(Boolean.TRUE, id)).thenReturn(Optional.of(materia));
+        Mockito.when(materiaMapper.toMateriaDTO(materia)).thenReturn(materiaDTO);
+        Assertions.assertEquals(Boolean.TRUE, materiaService.deleteById(id));
     }
 
     private void compareMateria(MateriaDTO expected, MateriaDTO actual){
@@ -82,13 +166,4 @@ public class MateriaServiceTest {
                 () -> Assertions.assertEquals(expected.getNome(), actual.getNome())
         );
     }
-
-    private void compareMateria(Materia expected, Materia actual){
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(expected.getId(), actual.getId()),
-                () -> Assertions.assertEquals(expected.getDescricao(), actual.getDescricao()),
-                () -> Assertions.assertEquals(expected.getNome(), actual.getNome())
-        );
-    }
-
 }

@@ -12,4 +12,6 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long> {
     List<Aluno> findAllByActive(Boolean active);
 
     List<Aluno> findAllByActiveAndPrograma_id(Boolean active, Long programa_id);
+
+    boolean existsByIdAndActive(Long id, Boolean active);
 }
