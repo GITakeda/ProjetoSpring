@@ -12,6 +12,7 @@ import com.example.demo.model.Mentoria;
 import com.example.demo.repository.MentoriaRepository;
 import com.example.demo.testFactory.AlunoTestFactory;
 import com.example.demo.testFactory.MentorTestFactory;
+import com.example.demo.testFactory.MentoriaTestFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,14 +49,8 @@ public class MentoriaServiceTest {
     public void testGetMentoriaComMentoriaExistente(){
         Long id = 1l;
 
-        Aluno aluno = AlunoTestFactory.createAluno(id);
-        AlunoDTO alunoDTO = AlunoTestFactory.createAlunoDTO(id);
-
-        Mentor mentor = MentorTestFactory.criarMentor(id);
-        MentorDTO mentorDTO = MentorTestFactory.criarMentorDTO(id);
-
-        Mentoria mentoria = new Mentoria(id, aluno, mentor, Boolean.TRUE);
-        MentoriaDTO mentoriaDTO = new MentoriaDTO(id, id, id);
+        Mentoria mentoria = MentoriaTestFactory.createMentoria(id);
+        MentoriaDTO mentoriaDTO = MentoriaTestFactory.createMentoriaDTO(id);
 
         Mockito.when(mentoriaRepository.findByActiveAndId(Boolean.TRUE, id)).thenReturn(Optional.of(mentoria));
         Mockito.when(mentoriaMapper.toMentoriaDTO(mentoria)).thenReturn(mentoriaDTO);
@@ -67,14 +62,8 @@ public class MentoriaServiceTest {
     public void testGetMentoriaComMentoriaInexistente(){
         Long id = 1l;
 
-        Aluno aluno = AlunoTestFactory.createAluno(id);
-        AlunoDTO alunoDTO = AlunoTestFactory.createAlunoDTO(id);
-
-        Mentor mentor = MentorTestFactory.criarMentor(id);
-        MentorDTO mentorDTO = MentorTestFactory.criarMentorDTO(id);
-
-        Mentoria mentoria = new Mentoria(id, aluno, mentor, Boolean.TRUE);
-        MentoriaDTO mentoriaDTO = new MentoriaDTO(id, id, id);
+        Mentoria mentoria = MentoriaTestFactory.createMentoria(id);
+        MentoriaDTO mentoriaDTO = MentoriaTestFactory.createMentoriaDTO(id);
 
         Mockito.when(mentoriaRepository.findByActiveAndId(Boolean.TRUE, id)).thenReturn(Optional.empty());
 
@@ -85,23 +74,11 @@ public class MentoriaServiceTest {
     public void testGetAllMentorias(){
         Long id = 1l;
 
-        Aluno aluno1 = AlunoTestFactory.createAluno(id);
-        AlunoDTO alunoDTO1 = AlunoTestFactory.createAlunoDTO(id);
+        Mentoria mentoria1 = MentoriaTestFactory.createMentoria(id);
+        MentoriaDTO mentoriaDTO1 = MentoriaTestFactory.createMentoriaDTO(id);
 
-        Mentor mentor1 = MentorTestFactory.criarMentor(id);
-        MentorDTO mentorDTO1 = MentorTestFactory.criarMentorDTO(id);
-
-        Aluno aluno2 = AlunoTestFactory.createAluno(id + 1);
-        AlunoDTO alunoDTO2 = AlunoTestFactory.createAlunoDTO(id + 1);
-
-        Mentor mentor2 = MentorTestFactory.criarMentor(id + 1);
-        MentorDTO mentorDTO2 = MentorTestFactory.criarMentorDTO(id + 1);
-
-        Mentoria mentoria1 = new Mentoria(id, aluno1, mentor1, Boolean.TRUE);
-        MentoriaDTO mentoriaDTO1 = new MentoriaDTO(id, id, id);
-
-        Mentoria mentoria2 = new Mentoria(id, aluno2, mentor2, Boolean.TRUE);
-        MentoriaDTO mentoriaDTO2 = new MentoriaDTO(id, id, id);
+        Mentoria mentoria2 = MentoriaTestFactory.createMentoria(id + 1);
+        MentoriaDTO mentoriaDTO2 = MentoriaTestFactory.createMentoriaDTO(id + 1);
 
         List<Mentoria> mentoriaList = List.of(mentoria1, mentoria2);
 
@@ -127,14 +104,8 @@ public class MentoriaServiceTest {
     public void testGravarMentoriaRepetida(){
         Long id = 1l;
 
-        Aluno aluno = AlunoTestFactory.createAluno(id);
-        AlunoDTO alunoDTO = AlunoTestFactory.createAlunoDTO(id);
-
-        Mentor mentor = MentorTestFactory.criarMentor(id);
-        MentorDTO mentorDTO = MentorTestFactory.criarMentorDTO(id);
-
-        Mentoria mentoria = new Mentoria(id, aluno, mentor, Boolean.TRUE);
-        MentoriaDTO mentoriaDTO = new MentoriaDTO(id, id, id);
+        Mentoria mentoria = MentoriaTestFactory.createMentoria(id);
+        MentoriaDTO mentoriaDTO = MentoriaTestFactory.createMentoriaDTO(id);
 
         Mockito.when(mentoriaRepository.findByActiveAndAluno_Id(Boolean.TRUE, id)).thenReturn(Optional.of(new Mentoria()));
 
@@ -145,14 +116,8 @@ public class MentoriaServiceTest {
     public void testGravarMentoriaNova(){
         Long id = 1l;
 
-        Aluno aluno = AlunoTestFactory.createAluno(id);
-        AlunoDTO alunoDTO = AlunoTestFactory.createAlunoDTO(id);
-
-        Mentor mentor = MentorTestFactory.criarMentor(id);
-        MentorDTO mentorDTO = MentorTestFactory.criarMentorDTO(id);
-
-        Mentoria mentoria = new Mentoria(id, aluno, mentor, Boolean.TRUE);
-        MentoriaDTO mentoriaDTO = new MentoriaDTO(id, id, id);
+        Mentoria mentoria = MentoriaTestFactory.createMentoria(id);
+        MentoriaDTO mentoriaDTO = MentoriaTestFactory.createMentoriaDTO(id);
 
         Mockito.when(mentoriaRepository.findByActiveAndAluno_Id(Boolean.TRUE, id)).thenReturn(Optional.empty());
         Mockito.when(mentoriaMapper.toMentoria(mentoriaDTO)).thenReturn(mentoria);
@@ -165,14 +130,8 @@ public class MentoriaServiceTest {
     public void testAlterarMentoriaComMentoriaInexistente(){
         Long id = 1l;
 
-        Aluno aluno = AlunoTestFactory.createAluno(id);
-        AlunoDTO alunoDTO = AlunoTestFactory.createAlunoDTO(id);
-
-        Mentor mentor = MentorTestFactory.criarMentor(id);
-        MentorDTO mentorDTO = MentorTestFactory.criarMentorDTO(id);
-
-        Mentoria mentoria = new Mentoria(id, aluno, mentor, Boolean.TRUE);
-        MentoriaDTO mentoriaDTO = new MentoriaDTO(id, id, id);
+        Mentoria mentoria = MentoriaTestFactory.createMentoria(id);
+        MentoriaDTO mentoriaDTO = MentoriaTestFactory.createMentoriaDTO(id);
 
         Mockito.when(mentoriaMapper.toMentoria(mentoriaDTO)).thenReturn(mentoria);
 
@@ -183,14 +142,8 @@ public class MentoriaServiceTest {
     public void testAlterarMentoriaComMentoriaRepetida(){
         Long id = 1l;
 
-        Aluno aluno = AlunoTestFactory.createAluno(id);
-        AlunoDTO alunoDTO = AlunoTestFactory.createAlunoDTO(id);
-
-        Mentor mentor = MentorTestFactory.criarMentor(id);
-        MentorDTO mentorDTO = MentorTestFactory.criarMentorDTO(id);
-
-        Mentoria mentoria = new Mentoria(id, aluno, mentor, Boolean.TRUE);
-        MentoriaDTO mentoriaDTO = new MentoriaDTO(id, id, id);
+        Mentoria mentoria = MentoriaTestFactory.createMentoria(id);
+        MentoriaDTO mentoriaDTO = MentoriaTestFactory.createMentoriaDTO(id);
 
         Mockito.when(mentoriaMapper.toMentoria(mentoriaDTO)).thenReturn(mentoria);
         Mockito.when(mentoriaRepository.existsByActiveAndId(Boolean.TRUE, id)).thenReturn(true);
@@ -203,14 +156,8 @@ public class MentoriaServiceTest {
     public void testAlterarMentoriaComMentoriaExistente(){
         Long id = 1l;
 
-        Aluno aluno = AlunoTestFactory.createAluno(id);
-        AlunoDTO alunoDTO = AlunoTestFactory.createAlunoDTO(id);
-
-        Mentor mentor = MentorTestFactory.criarMentor(id);
-        MentorDTO mentorDTO = MentorTestFactory.criarMentorDTO(id);
-
-        Mentoria mentoria = new Mentoria(id, aluno, mentor, Boolean.TRUE);
-        MentoriaDTO mentoriaDTO = new MentoriaDTO(id, id, id);
+        Mentoria mentoria = MentoriaTestFactory.createMentoria(id);
+        MentoriaDTO mentoriaDTO = MentoriaTestFactory.createMentoriaDTO(id);
 
         Mockito.when(mentoriaMapper.toMentoria(mentoriaDTO)).thenReturn(mentoria);
         Mockito.when(mentoriaRepository.existsByActiveAndId(Boolean.TRUE, id)).thenReturn(true);
@@ -223,14 +170,8 @@ public class MentoriaServiceTest {
     public void testDeleteMentoriaComMentoriaExistente(){
         Long id = 1l;
 
-        Aluno aluno = AlunoTestFactory.createAluno(id);
-        AlunoDTO alunoDTO = AlunoTestFactory.createAlunoDTO(id);
-
-        Mentor mentor = MentorTestFactory.criarMentor(id);
-        MentorDTO mentorDTO = MentorTestFactory.criarMentorDTO(id);
-
-        Mentoria mentoria = new Mentoria(id, aluno, mentor, Boolean.TRUE);
-        MentoriaDTO mentoriaDTO = new MentoriaDTO(id, id, id);
+        Mentoria mentoria = MentoriaTestFactory.createMentoria(id);
+        MentoriaDTO mentoriaDTO = MentoriaTestFactory.createMentoriaDTO(id);
 
         Mockito.when(mentoriaRepository.findByActiveAndId(Boolean.TRUE, id)).thenReturn(Optional.of(mentoria));
 
@@ -241,14 +182,8 @@ public class MentoriaServiceTest {
     public void testDeleteMentoriaComMentoriaInexistente(){
         Long id = 1l;
 
-        Aluno aluno = AlunoTestFactory.createAluno(id);
-        AlunoDTO alunoDTO = AlunoTestFactory.createAlunoDTO(id);
-
-        Mentor mentor = MentorTestFactory.criarMentor(id);
-        MentorDTO mentorDTO = MentorTestFactory.criarMentorDTO(id);
-
-        Mentoria mentoria = new Mentoria(id, aluno, mentor, Boolean.TRUE);
-        MentoriaDTO mentoriaDTO = new MentoriaDTO(id, id, id);
+        Mentoria mentoria = MentoriaTestFactory.createMentoria(id);
+        MentoriaDTO mentoriaDTO = MentoriaTestFactory.createMentoriaDTO(id);
 
         Mockito.when(mentoriaRepository.findByActiveAndId(Boolean.TRUE, id)).thenReturn(Optional.empty());
 

@@ -7,6 +7,7 @@ import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.Aluno;
 import com.example.demo.model.Programa;
 import com.example.demo.repository.AlunoRepository;
+import com.example.demo.testFactory.AlunoTestFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,12 +38,8 @@ public class AlunoServiceTest {
     public void testGetAlunoComAlunoExistente() {
         Long id = 1l;
 
-        ProgramaDTO programaDTO = new ProgramaDTO(id, "nome", "ano");
-        AlunoDTO alunoDTO = new AlunoDTO(id, "AlunoTeste", "Teste", programaDTO);
-
-        Programa programa = new Programa(id, programaDTO.getNome(), programaDTO.getAno(), Boolean.TRUE);
-        Aluno aluno = new Aluno(id, programa, alunoDTO.getClasse(), alunoDTO.getNome(), Boolean.TRUE);
-
+        Aluno aluno = AlunoTestFactory.createAluno(id);
+        AlunoDTO alunoDTO = AlunoTestFactory.createAlunoDTO(id);
 
         Mockito.when(alunoRepository.findByActiveAndId(Boolean.TRUE, id)).thenReturn(Optional.of(aluno));
 
@@ -55,12 +52,8 @@ public class AlunoServiceTest {
     public void testGetAlunoComAlunoInexistente() {
         Long id = 1l;
 
-        ProgramaDTO programaDTO = new ProgramaDTO(id, "nome", "ano");
-        AlunoDTO alunoDTO = new AlunoDTO(id, "AlunoTeste", "Teste", programaDTO);
-
-        Programa programa = new Programa(id, programaDTO.getNome(), programaDTO.getAno(), Boolean.TRUE);
-        Aluno aluno = new Aluno(id, programa, alunoDTO.getClasse(), alunoDTO.getNome(), Boolean.TRUE);
-
+        Aluno aluno = AlunoTestFactory.createAluno(id);
+        AlunoDTO alunoDTO = AlunoTestFactory.createAlunoDTO(id);
 
         Mockito.when(alunoRepository.findByActiveAndId(Boolean.TRUE, id)).thenReturn(Optional.empty());
 
@@ -145,7 +138,6 @@ public class AlunoServiceTest {
 
 
         Assertions.assertThrows(Exception.class, () -> alunoService.save(alunoDTO, id));
-
     }
 
     @Test
@@ -185,25 +177,7 @@ public class AlunoServiceTest {
         comparePrograma(expected.getProgramaDTO(), actual.getProgramaDTO());
     }
 
-    private void compareAluno(Aluno expected, Aluno actual){
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(expected.getId(), actual.getId()),
-                () -> Assertions.assertEquals(expected.getClasse(), actual.getClasse()),
-                () -> Assertions.assertEquals(expected.getNome(), actual.getNome())
-        );
-
-        comparePrograma(expected.getPrograma(), actual.getPrograma());
-    }
-
     private void comparePrograma(ProgramaDTO expected, ProgramaDTO actual){
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(expected.getId(), actual.getId()),
-                () -> Assertions.assertEquals(expected.getNome(), actual.getNome()),
-                () -> Assertions.assertEquals(expected.getAno(), actual.getAno())
-        );
-    }
-
-    private void comparePrograma(Programa expected, Programa actual){
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expected.getId(), actual.getId()),
                 () -> Assertions.assertEquals(expected.getNome(), actual.getNome()),

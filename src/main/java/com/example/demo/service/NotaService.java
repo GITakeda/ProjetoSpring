@@ -48,51 +48,47 @@ public class NotaService {
     }
 
     public Long save(NotaDTO notaDTO) throws WrongArgumentException {
-        Optional<Nota> notaOptional = Optional.of(mapper.toNota(notaDTO));
-
-        if(notaOptional.isEmpty()){
-            throw new WrongArgumentException("Nota com informações incorretas");
-        }
+        Nota nota = mapper.toNota(notaDTO);
 
         if(notaRepository.findIgual(notaDTO.getMateria_id(),
                 notaDTO.getMentoria_id(),
-                notaOptional.get().getData(),
+                nota.getData(),
                 notaDTO.getId())
                 .isPresent()){
             throw new WrongArgumentException("Nota para esse mês já lançada");
         }
 
-        notaRepository.save(notaOptional.get());
-        notaDTO.setId(notaOptional.get().getId());
+        notaRepository.save(nota);
+        notaDTO.setId(nota.getId());
         return notaDTO.getId();
     }
 
-    public Long save(NotaDTO notaDTO, Long id) throws WrongArgumentException {
+    public Long save(NotaDTO notaDTO, Long id) throws WrongArgumentException, NotFoundException {
         notaDTO.setId(id);
 
-        Optional<Nota> notaOptional = Optional.of(mapper.toNota(notaDTO));
+        Nota nota = mapper.toNota(notaDTO);
 
-        if(!notaRepository.existsByIdAndActive(id, Boolean.TRUE) || notaOptional.isEmpty()){
-            throw new WrongArgumentException("Nota com informações incorretas");
+        if(!notaRepository.existsByIdAndActive(id, Boolean.TRUE)){
+            throw new NotFoundException("Nota não encontrada");
         }
 
         if(notaRepository.findIgual(notaDTO.getMateria_id(),
                                     notaDTO.getMentoria_id(),
-                                    notaOptional.get().getData(),
+                                    nota.getData(),
                                     id).isPresent()){
             throw new WrongArgumentException("Nota para esse mês já lançada");
         }
 
-        notaOptional.get().setId(id);
+        nota.setId(id);
         notaDTO.setId(id);
-        notaRepository.save(notaOptional.get());
+        notaRepository.save(nota);
 
         return notaDTO.getId();
     }
 
     @Transactional
     public boolean delete(Long id){
-        return inativar(notaRepository.findById(id));
+        return inativar(notaRepository.findByActiveAndId(Boolean.TRUE, id));
     }
 
     @Transactional
