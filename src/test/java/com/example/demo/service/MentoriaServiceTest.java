@@ -193,8 +193,8 @@ public class MentoriaServiceTest {
     private void compareMentoria(MentoriaDTO expected, MentoriaDTO actual){
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expected.getId(), actual.getId()),
-                () -> Assertions.assertEquals(expected.getAluno_id(), actual.getAluno_id()),
-                () -> Assertions.assertEquals(expected.getMentor_id(), actual.getMentor_id())
+                () -> Assertions.assertEquals(expected.getAlunoDTO(), actual.getAlunoDTO()),
+                () -> Assertions.assertEquals(expected.getMentorDTO(), actual.getMentorDTO())
         );
     }
 

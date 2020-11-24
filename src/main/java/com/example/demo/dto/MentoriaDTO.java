@@ -15,14 +15,8 @@ public class MentoriaDTO {
     private Long id;
 
     @NotNull
-    private Long mentor_id;
+    private MentorDTO mentorDTO;
 
     @NotNull
-    private Long aluno_id;
-
-    public MentoriaDTO(Mentoria mentoria){
-        this.id = mentoria.getId();
-        this.mentor_id = mentoria.getMentor().getId();
-        this.aluno_id = mentoria.getAluno().getId();
-    }
+    private AlunoDTO alunoDTO;
 }

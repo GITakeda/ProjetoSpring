@@ -67,11 +67,14 @@ public class MentorService {
 
         mentor.get().setActive(Boolean.FALSE);
 
-        mentoriaService.inativarMentoria(mapper.toMentorDTO(mentor.get()));
+        try {
+            mentoriaService.inativarMentoria(mapper.toMentorDTO(mentor.get()));
+        } catch(NotFoundException e){
+        } finally {
+            mentorRepository.save(mentor.get());
 
-        mentorRepository.save(mentor.get());
-
-        return true;
+            return true;
+        }
     }
 
     public List<MentorDTO> findAll() {

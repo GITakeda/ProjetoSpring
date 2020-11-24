@@ -12,14 +12,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@NotNull
 public class ProgramaDTO {
 
     private Long id;
 
-    @NotNull
     private String nome;
 
-    @NotNull
     private String ano;
 }

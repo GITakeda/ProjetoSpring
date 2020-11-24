@@ -13,9 +13,5 @@ public interface NotaMapper {
     @Mapping(target = "active",constant = "true")
     Nota toNota(NotaDTO notaDTO) throws NotFoundException;
 
-    @Mappings({
-            @Mapping(target = "mentoria_id", source = "nota.mentoria.id"),
-            @Mapping(target = "materia_id", source = "nota.materia.id")
-    })
     NotaDTO toNotaDTO(Nota nota);
 }

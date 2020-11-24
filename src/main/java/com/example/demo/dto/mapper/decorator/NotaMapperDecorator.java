@@ -36,20 +36,28 @@ public class NotaMapperDecorator implements NotaMapper {
     private NotaMapper delegated;
 
     @Override
+    public NotaDTO toNotaDTO(Nota nota) {
+        NotaDTO notaDTO = delegated.toNotaDTO(nota);
+
+        MateriaDTO materiaDTO = materiaMapper.toMateriaDTO(nota.getMateria());
+        MentoriaDTO mentoriaDTO = mentoriaMapper.toMentoriaDTO(nota.getMentoria());
+
+        notaDTO.setMateriaDTO(materiaDTO);
+        notaDTO.setMentoriaDTO(mentoriaDTO);
+
+        return notaDTO;
+    }
+
+    @Override
     public Nota toNota(NotaDTO notaDTO) throws NotFoundException {
         Nota nota = delegated.toNota(notaDTO);
 
-        MateriaDTO materiaDTOOptional = materiaService.findById(notaDTO.getMateria_id());
-        MentoriaDTO mentoriaDTOOptional = mentoriaService.findById(notaDTO.getMentoria_id());
+        MateriaDTO materiaDTOOptional = materiaService.findById(notaDTO.getMateriaDTO().getId());
+        MentoriaDTO mentoriaDTOOptional = mentoriaService.findById(notaDTO.getMentoriaDTO().getId());
 
         nota.setMateria(materiaMapper.toMateria(materiaDTOOptional));
         nota.setMentoria(mentoriaMapper.toMentoria(mentoriaDTOOptional));
 
         return nota;
-    }
-
-    @Override
-    public NotaDTO toNotaDTO(Nota nota) {
-        return delegated.toNotaDTO(nota);
     }
 }

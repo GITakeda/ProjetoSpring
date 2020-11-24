@@ -13,9 +13,6 @@ import org.mapstruct.Mappings;
 @DecoratedWith(MentoriaMapperDecorator.class)
 public interface MentoriaMapper {
 
-    @Mappings({
-            @Mapping(target="aluno_id", source="mentoria.aluno.id"),
-            @Mapping(target="mentor_id", source="mentoria.mentor.id")})
     MentoriaDTO toMentoriaDTO(Mentoria mentoria);
 
     @Mapping(target = "active",constant = "true")

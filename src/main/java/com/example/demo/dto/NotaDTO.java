@@ -14,10 +14,10 @@ public class NotaDTO {
     private Long id;
 
     @NotNull
-    private Long mentoria_id;
+    private MentoriaDTO mentoriaDTO;
 
     @NotNull
-    private Long materia_id;
+    private MateriaDTO materiaDTO;
 
     private LocalDate data;
 

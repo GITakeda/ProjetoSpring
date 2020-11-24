@@ -27,7 +27,7 @@ public class MentoriaTestFactory {
         Mentor mentor = MentorTestFactory.criarMentor(id);
         MentorDTO mentorDTO = MentorTestFactory.criarMentorDTO(id);
 
-        return new MentoriaDTO(id, id, id);
+        return new MentoriaDTO(id, mentorDTO, alunoDTO);
     }
 
 }

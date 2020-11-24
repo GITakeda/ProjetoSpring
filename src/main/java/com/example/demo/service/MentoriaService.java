@@ -47,8 +47,8 @@ public class MentoriaService {
     public Long save(MentoriaDTO mentoriaDTO) throws WrongArgumentException{
         Mentoria mentoria = mapper.toMentoria(mentoriaDTO);
 
-        if(mentoriaRepository.findByActiveAndAluno_Id(Boolean.TRUE, mentoriaDTO.getAluno_id()).isPresent()){
-            throw new WrongArgumentException("Mentoria não criada");
+        if(mentoriaRepository.findByActiveAndAluno_Id(Boolean.TRUE, mentoriaDTO.getAlunoDTO().getId()).isPresent()){
+            throw new WrongArgumentException("Mentoria já existente para o aluno selecionado");
         }
 
         mentoria = mentoriaRepository.save(mentoria);
@@ -67,7 +67,7 @@ public class MentoriaService {
             throw new NotFoundException("Mentoria não encontrada");
         }
 
-        if(mentoriaRepository.findIgual(mentoriaDTO.getAluno_id(), id).isPresent()){
+        if(mentoriaRepository.findIgual(mentoriaDTO.getAlunoDTO().getId(), id).isPresent()){
             throw new WrongArgumentException("Mentoria já criada para o aluno inserido");
         }
 
@@ -95,10 +95,14 @@ public class MentoriaService {
 
         mentoria.get().setActive(Boolean.FALSE);
 
-        notaService.inativarNota(mapper.toMentoriaDTO(mentoria.get()));
+        try {
+            notaService.inativarNota(mapper.toMentoriaDTO(mentoria.get()));
+        } catch(NotFoundException e){
 
-        mentoriaRepository.save(mentoria.get());
+        } finally {
+            mentoriaRepository.save(mentoria.get());
 
-        return true;
+            return true;
+        }
     }
 }

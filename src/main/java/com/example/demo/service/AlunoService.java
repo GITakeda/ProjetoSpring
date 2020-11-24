@@ -74,11 +74,14 @@ public class AlunoService {
 
         aluno.get().setActive(Boolean.FALSE);
 
-        mentoriaService.inativarMentoria(mapper.toAlunoDTO(aluno.get()));
+        try {
+            mentoriaService.inativarMentoria(mapper.toAlunoDTO(aluno.get()));
+        } catch(NotFoundException e){
+        } finally {
+            alunoRepository.save(aluno.get());
 
-        alunoRepository.save(aluno.get());
-
-        return true;
+            return true;
+        }
     }
 
     public List<AlunoDTO> getAlunos() {

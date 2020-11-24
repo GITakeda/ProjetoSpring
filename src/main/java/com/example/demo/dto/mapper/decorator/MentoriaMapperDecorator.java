@@ -39,15 +39,23 @@ public class MentoriaMapperDecorator implements MentoriaMapper {
 
     @Override
     public MentoriaDTO toMentoriaDTO(Mentoria mentoria) {
-        return delegate.toMentoriaDTO(mentoria);
+        MentoriaDTO mentoriaDTO = delegate.toMentoriaDTO(mentoria);
+
+        MentorDTO mentorDTO = mentorMapper.toMentorDTO(mentoria.getMentor());
+        AlunoDTO alunoDTO = alunoMapper.toAlunoDTO(mentoria.getAluno());
+
+        mentoriaDTO.setAlunoDTO(alunoDTO);
+        mentoriaDTO.setMentorDTO(mentorDTO);
+
+        return mentoriaDTO;
     }
 
     @Override
     public Mentoria toMentoria(MentoriaDTO mentoriaDTO) throws NotFoundException {
         Mentoria mentoria = delegate.toMentoria(mentoriaDTO);
 
-        MentorDTO mentorDTOOptional = mentorService.findById(mentoriaDTO.getMentor_id());
-        AlunoDTO alunoDTOOptional = alunoService.findById(mentoriaDTO.getAluno_id());
+        MentorDTO mentorDTOOptional = mentorService.findById(mentoriaDTO.getMentorDTO().getId());
+        AlunoDTO alunoDTOOptional = alunoService.findById(mentoriaDTO.getAlunoDTO().getId());
 
         mentoria.setMentor(mentorMapper.toMentor(mentorDTOOptional));
 

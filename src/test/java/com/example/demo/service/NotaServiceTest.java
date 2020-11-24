@@ -99,8 +99,8 @@ public class NotaServiceTest {
         NotaDTO notaDTO = NotaTestFactory.createNotaDTO(id);
 
         Mockito.when(notaMapper.toNota(notaDTO)).thenReturn(nota);
-        Mockito.when(notaRepository.findIgual(notaDTO.getMateria_id(),
-                notaDTO.getMentoria_id(),
+        Mockito.when(notaRepository.findIgual(notaDTO.getMateriaDTO().getId(),
+                notaDTO.getMentoriaDTO().getId(),
                 notaDTO.getData(),
                 notaDTO.getId())).thenReturn(Optional.of(new Nota()));
 
@@ -115,8 +115,8 @@ public class NotaServiceTest {
         NotaDTO notaDTO = NotaTestFactory.createNotaDTO(id);
 
         Mockito.when(notaMapper.toNota(notaDTO)).thenReturn(nota);
-        Mockito.when(notaRepository.findIgual(notaDTO.getMateria_id(),
-                notaDTO.getMentoria_id(),
+        Mockito.when(notaRepository.findIgual(notaDTO.getMateriaDTO().getId(),
+                notaDTO.getMentoriaDTO().getId(),
                 notaDTO.getData(),
                 notaDTO.getId())).thenReturn(Optional.empty());
 
@@ -145,8 +145,8 @@ public class NotaServiceTest {
 
         Mockito.when(notaMapper.toNota(notaDTO)).thenReturn(nota);
         Mockito.when(notaRepository.existsByIdAndActive(id, Boolean.TRUE)).thenReturn(true);
-        Mockito.when(notaRepository.findIgual(notaDTO.getMateria_id(),
-                notaDTO.getMentoria_id(), notaDTO.getData(), notaDTO.getId())).thenReturn(Optional.of(new Nota()));
+        Mockito.when(notaRepository.findIgual(notaDTO.getMateriaDTO().getId(),
+                notaDTO.getMentoriaDTO().getId(), notaDTO.getData(), notaDTO.getId())).thenReturn(Optional.of(new Nota()));
 
         Assertions.assertThrows(WrongArgumentException.class, () -> notaService.save(notaDTO, id));
     }
@@ -160,8 +160,8 @@ public class NotaServiceTest {
 
         Mockito.when(notaMapper.toNota(notaDTO)).thenReturn(nota);
         Mockito.when(notaRepository.existsByIdAndActive(id, Boolean.TRUE)).thenReturn(true);
-        Mockito.when(notaRepository.findIgual(notaDTO.getMateria_id(),
-                notaDTO.getMentoria_id(), notaDTO.getData(), notaDTO.getId())).thenReturn(Optional.empty());
+        Mockito.when(notaRepository.findIgual(notaDTO.getMateriaDTO().getId(),
+                notaDTO.getMentoriaDTO().getId(), notaDTO.getData(), notaDTO.getId())).thenReturn(Optional.empty());
 
         Assertions.assertEquals(id, notaService.save(notaDTO, id));
     }
@@ -193,8 +193,8 @@ public class NotaServiceTest {
     private void compareNota(NotaDTO expected, NotaDTO actual){
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expected.getId(), actual.getId()),
-                () -> Assertions.assertEquals(expected.getMateria_id(), actual.getMentoria_id()),
-                () -> Assertions.assertEquals(expected.getMentoria_id(), actual.getMentoria_id()),
+                () -> Assertions.assertEquals(expected.getMateriaDTO().getId(), actual.getMateriaDTO().getId()),
+                () -> Assertions.assertEquals(expected.getMentoriaDTO().getId(), actual.getMentoriaDTO().getId()),
                 () -> Assertions.assertEquals(expected.getData(), actual.getData()),
                 () -> Assertions.assertEquals(expected.getPontuacao(), actual.getPontuacao())
         );

@@ -31,7 +31,7 @@ public class AlunoController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity save(@RequestBody @Validated AlunoDTO aluno){
+    public ResponseEntity save(@RequestBody AlunoDTO aluno){
         Long id = 0l;
         id = alunoService.save(aluno);
 

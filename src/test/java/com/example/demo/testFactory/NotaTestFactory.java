@@ -1,5 +1,7 @@
 package com.example.demo.testFactory;
 
+import com.example.demo.dto.MateriaDTO;
+import com.example.demo.dto.MentoriaDTO;
 import com.example.demo.dto.NotaDTO;
 import com.example.demo.model.Materia;
 import com.example.demo.model.Mentoria;
@@ -17,7 +19,10 @@ public class NotaTestFactory {
     }
 
     public static NotaDTO createNotaDTO(Long id){
-        return new NotaDTO(id, id, id, LocalDate.now(), 10d);
+        MentoriaDTO mentoriaDTO = MentoriaTestFactory.createMentoriaDTO(id);
+        MateriaDTO materiaDTO = new MateriaDTO(id, "nome", "descricao");
+
+        return new NotaDTO(id, mentoriaDTO, materiaDTO, LocalDate.now(), 10d);
     }
 
 }

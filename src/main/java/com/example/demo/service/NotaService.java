@@ -50,8 +50,8 @@ public class NotaService {
     public Long save(NotaDTO notaDTO) throws WrongArgumentException {
         Nota nota = mapper.toNota(notaDTO);
 
-        if(notaRepository.findIgual(notaDTO.getMateria_id(),
-                notaDTO.getMentoria_id(),
+        if(notaRepository.findIgual(notaDTO.getMateriaDTO().getId(),
+                notaDTO.getMentoriaDTO().getId(),
                 nota.getData(),
                 notaDTO.getId())
                 .isPresent()){
@@ -72,8 +72,8 @@ public class NotaService {
             throw new NotFoundException("Nota não encontrada");
         }
 
-        if(notaRepository.findIgual(notaDTO.getMateria_id(),
-                                    notaDTO.getMentoria_id(),
+        if(notaRepository.findIgual(notaDTO.getMateriaDTO().getId(),
+                                    notaDTO.getMentoriaDTO().getId(),
                                     nota.getData(),
                                     id).isPresent()){
             throw new WrongArgumentException("Nota para esse mês já lançada");

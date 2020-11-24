@@ -76,9 +76,15 @@ public class MateriaService {
         }
 
         materia.get().setActive(Boolean.FALSE);
-        notaService.inativarNota(mapper.toMateriaDTO(materia.get()));
-        materiaRepository.save(materia.get());
 
-        return true;
+        try {
+            notaService.inativarNota(mapper.toMateriaDTO(materia.get()));
+        } catch(NotFoundException e){
+
+        } finally {
+            materiaRepository.save(materia.get());
+
+            return true;
+        }
     }
 }
