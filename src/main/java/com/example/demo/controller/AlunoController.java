@@ -3,6 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.dto.AlunoDTO;
 import com.example.demo.service.AlunoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,8 +29,8 @@ public class AlunoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AlunoDTO>> findAll(){
-        return ResponseEntity.ok(alunoService.getAlunos());
+    public ResponseEntity<Page<AlunoDTO>> findAll(@PageableDefault() Pageable pageable ){
+        return ResponseEntity.ok(alunoService.getAlunos(pageable));
     }
 
     @PostMapping("/post")

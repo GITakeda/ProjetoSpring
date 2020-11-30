@@ -7,6 +7,9 @@ import com.example.demo.model.Materia;
 import com.example.demo.repository.MateriaRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +32,7 @@ public class MateriaService {
         Optional<Materia> materiaOptional = materiaRepository.findByActiveAndId(Boolean.TRUE, id);
 
         if(materiaOptional.isEmpty()){
-            throw new NotFoundException("Materia não encontrada");
+            throw new NotFoundException("Matéria não encontrada");
         }
 
         return mapper.toMateriaDTO(materiaOptional.get());
@@ -40,6 +43,14 @@ public class MateriaService {
                                 .parallelStream()
                                 .map(mapper::toMateriaDTO)
                                 .collect(Collectors.toList());
+    }
+
+    public Page<MateriaDTO> findAll(Pageable pageable){
+        Page<Materia> materias = materiaRepository.findAllByActive(Boolean.TRUE, pageable);
+        Page<MateriaDTO> materiasP = new PageImpl<MateriaDTO>(materias.getContent().parallelStream()
+                .map(mapper::toMateriaDTO)
+                .collect(Collectors.toList()), materias.getPageable(), materias.getTotalElements());
+        return materiasP;
     }
 
     public Long save(MateriaDTO materiaDTO){
@@ -56,7 +67,7 @@ public class MateriaService {
         materiaDTO.setId(id);
 
         if(!materiaRepository.existsByIdAndActive(id, Boolean.TRUE)){
-            throw new NotFoundException("Materia não encontrada");
+            throw new NotFoundException("Matéria não encontrada");
         }
 
         Materia novaMateria = mapper.toMateria(materiaDTO);
@@ -72,7 +83,7 @@ public class MateriaService {
         Optional<Materia> materia = materiaRepository.findByActiveAndId(Boolean.TRUE, id);
 
         if(materia.isEmpty()){
-            throw new NotFoundException("Materia não encotnrada");
+            throw new NotFoundException("Matéria não encotnrada");
         }
 
         materia.get().setActive(Boolean.FALSE);

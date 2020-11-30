@@ -13,6 +13,9 @@ import com.example.demo.model.Programa;
 import com.example.demo.repository.NotaRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +37,7 @@ public class NotaService {
         Optional<Nota> nota = notaRepository.findByActiveAndId(Boolean.TRUE, id);
 
         if(nota.isEmpty()){
-            throw new NotFoundException("Nota não encontrado");
+            throw new NotFoundException("Nota não encontrada");
         }
 
         return mapper.toNotaDTO(nota.get());
@@ -43,8 +46,16 @@ public class NotaService {
     public List<NotaDTO> findAll(){
         return notaRepository.findAllByActive(Boolean.TRUE)
                 .parallelStream()
-                .map(mapper::toNotaDTO)
+                .map(mapper::toNotaDTO).sorted((nota1, nota2) -> {return nota1.getData().compareTo(nota2.getData());})
                 .collect(Collectors.toList());
+    }
+
+    public Page<NotaDTO> findAll(Pageable pageable){
+        Page<Nota> notas = notaRepository.findAllByActive(Boolean.TRUE, pageable);
+        Page<NotaDTO> notasP = new PageImpl<NotaDTO>(notas.getContent().parallelStream()
+                .map(mapper::toNotaDTO)
+                .collect(Collectors.toList()), notas.getPageable(), notas.getTotalElements());
+        return notasP;
     }
 
     public Long save(NotaDTO notaDTO) throws WrongArgumentException {

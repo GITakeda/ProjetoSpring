@@ -1,8 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.MateriaDTO;
 import com.example.demo.dto.MentorDTO;
 import com.example.demo.service.MentorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +29,8 @@ public class MentorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MentorDTO>> findAll(){
-        return ResponseEntity.ok(mentorService.findAll());
+    public ResponseEntity<Page<MentorDTO>> findAll(@PageableDefault() Pageable pageable ){
+        return ResponseEntity.ok(mentorService.findAll(pageable));
     }
 
     @PostMapping("/post")

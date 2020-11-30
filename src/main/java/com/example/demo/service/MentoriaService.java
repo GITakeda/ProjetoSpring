@@ -12,6 +12,9 @@ import com.example.demo.model.Mentoria;
 import com.example.demo.repository.MentoriaRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,6 +45,14 @@ public class MentoriaService {
 
     public List<MentoriaDTO> findAll(){
         return mentoriaRepository.findAllByActive(Boolean.TRUE).parallelStream().map(mapper::toMentoriaDTO).collect(Collectors.toList());
+    }
+
+    public Page<MentoriaDTO> findAll(Pageable pageable){
+        Page<Mentoria> mentorias = mentoriaRepository.findAllByActive(Boolean.TRUE, pageable);
+        Page<MentoriaDTO> mentoriasP = new PageImpl<MentoriaDTO>(mentorias.getContent().parallelStream()
+                .map(mapper::toMentoriaDTO)
+                .collect(Collectors.toList()), mentorias.getPageable(), mentorias.getTotalElements());
+        return mentoriasP;
     }
 
     public Long save(MentoriaDTO mentoriaDTO) throws WrongArgumentException{

@@ -1,7 +1,10 @@
 package com.example.demo.repository;
 
+import com.example.demo.model.Aluno;
 import com.example.demo.model.Mentoria;
 import com.example.demo.model.Nota;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,6 +20,8 @@ public interface MentoriaRepository extends JpaRepository<Mentoria, Long> {
     Optional<Mentoria> findByActiveAndMentor_Id(Boolean active, Long id);
 
     List<Mentoria> findAllByActive(Boolean active);
+
+    Page<Mentoria> findAllByActive(Boolean active, Pageable pageable);
 
     boolean existsByActiveAndId(Boolean active, Long id);
 

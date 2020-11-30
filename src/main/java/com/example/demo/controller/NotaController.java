@@ -1,9 +1,13 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.MateriaDTO;
 import com.example.demo.dto.NotaDTO;
 import com.example.demo.model.Nota;
 import com.example.demo.service.NotaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,19 +29,15 @@ public class NotaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<NotaDTO>> findAll(){
-        return ResponseEntity.ok(notaService.findAll());
+    public ResponseEntity<Page<NotaDTO>> findAll(@PageableDefault() Pageable pageable ){
+        return ResponseEntity.ok(notaService.findAll(pageable));
     }
 
     @PostMapping("/post")
     public ResponseEntity save(@RequestBody NotaDTO notaDTO){
         Long id = 0l;
-        try {
-            id = notaService.save(notaDTO);
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-            return ResponseEntity.noContent().build();
-        }
+
+        id = notaService.save(notaDTO);
 
         return ResponseEntity.created(URI.create("/nota/" + id)).build();
     }
@@ -45,13 +45,8 @@ public class NotaController {
     @PutMapping("/{id}")
     public ResponseEntity save(@RequestBody NotaDTO notaDTO, @PathVariable Long id){
         Long idRegistro = 0l;
-        try{
-            idRegistro = notaService.save(notaDTO, id);
 
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-            return ResponseEntity.noContent().build();
-        }
+        idRegistro = notaService.save(notaDTO, id);
 
         return ResponseEntity.created(URI.create("/nota/" + idRegistro)).build();
     }

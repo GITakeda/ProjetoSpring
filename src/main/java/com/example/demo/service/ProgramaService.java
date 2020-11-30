@@ -9,6 +9,9 @@ import com.example.demo.repository.AlunoRepository;
 import com.example.demo.repository.ProgramaRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -83,5 +86,13 @@ public class ProgramaService {
 
     public List<ProgramaDTO> findAll() {
         return programaRepository.findAllByActive(Boolean.TRUE).parallelStream().map(mapper::toProgramaDTO).collect(Collectors.toList());
+    }
+
+    public Page<ProgramaDTO> findAll(Pageable pageable){
+        Page<Programa> programas = programaRepository.findAllByActive(Boolean.TRUE, pageable);
+        Page<ProgramaDTO> programasP = new PageImpl<ProgramaDTO>(programas.getContent().parallelStream()
+                .map(mapper::toProgramaDTO)
+                .collect(Collectors.toList()), programas.getPageable(), programas.getTotalElements());
+        return programasP;
     }
 }

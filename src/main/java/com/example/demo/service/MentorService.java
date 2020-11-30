@@ -8,6 +8,9 @@ import com.example.demo.repository.MentorRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -82,5 +85,13 @@ public class MentorService {
                             .parallelStream()
                             .map(mapper::toMentorDTO)
                             .collect(Collectors.toList());
+    }
+
+    public Page<MentorDTO> findAll(Pageable pageable){
+        Page<Mentor> mentores = mentorRepository.findAllByActive(Boolean.TRUE, pageable);
+        Page<MentorDTO> mentoresP = new PageImpl<MentorDTO>(mentores.getContent().parallelStream()
+                .map(mapper::toMentorDTO)
+                .collect(Collectors.toList()), mentores.getPageable(), mentores.getTotalElements());
+        return mentoresP;
     }
 }

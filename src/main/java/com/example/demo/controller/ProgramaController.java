@@ -1,11 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.MateriaDTO;
 import com.example.demo.dto.MentorDTO;
 import com.example.demo.dto.ProgramaDTO;
 import com.example.demo.model.Programa;
 import com.example.demo.service.ProgramaService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +32,8 @@ public class ProgramaController{
     }
 
     @GetMapping
-    public ResponseEntity<List<ProgramaDTO>> findAll(){
-        return ResponseEntity.ok(programaService.findAll());
+    public ResponseEntity<Page<ProgramaDTO>> findAll(@PageableDefault() Pageable pageable ){
+        return ResponseEntity.ok(programaService.findAll(pageable));
     }
 
     @PostMapping("/post")

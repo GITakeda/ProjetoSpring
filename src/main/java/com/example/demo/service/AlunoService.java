@@ -9,6 +9,10 @@ import com.example.demo.model.Aluno;
 import com.example.demo.repository.AlunoRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -86,9 +90,17 @@ public class AlunoService {
 
     public List<AlunoDTO> getAlunos() {
         return alunoRepository.findAllByActive(Boolean.TRUE)
-                              .parallelStream()
-                              .map(mapper::toAlunoDTO)
-                              .collect(Collectors.toList());
+                .parallelStream()
+                .map(mapper::toAlunoDTO)
+                .collect(Collectors.toList());
+    }
+
+    public Page<AlunoDTO> getAlunos(Pageable pageable) {
+        Page<Aluno> alunos = alunoRepository.findAllByActive(Boolean.TRUE, pageable);
+        Page<AlunoDTO> alunosP = new PageImpl<AlunoDTO>(alunos.getContent().parallelStream()
+                .map(mapper::toAlunoDTO)
+                .collect(Collectors.toList()), alunos.getPageable(), alunos.getTotalElements());
+        return alunosP;
     }
 
     public List<AlunoDTO> getAlunosByPrograma(Long programa_id){
