@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers;
 @DecoratedWith(AlunoMapperDecorator.class)
 public interface AlunoMapper {
 
-    @Mapping(target = "active",constant = "true")
+//    @Mapping(target = "active",constant = "true")
     Aluno toAluno(AlunoDTO alunoDTO) throws NotFoundException;
 
     AlunoDTO toAlunoDTO(Aluno aluno);

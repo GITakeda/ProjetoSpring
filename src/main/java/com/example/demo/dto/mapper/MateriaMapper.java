@@ -11,7 +11,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface MateriaMapper {
 
-    @Mapping(target = "active",constant = "true")
+//    @Mapping(target = "active",constant = "true")
     Materia toMateria(MateriaDTO materiaDTO);
     MateriaDTO toMateriaDTO(Materia materia);
 }

@@ -10,7 +10,7 @@ import org.mapstruct.*;
 @DecoratedWith(NotaMapperDecorator.class)
 public interface NotaMapper {
 
-    @Mapping(target = "active",constant = "true")
+//    @Mapping(target = "active",constant = "true")
     Nota toNota(NotaDTO notaDTO) throws NotFoundException;
 
     NotaDTO toNotaDTO(Nota nota);

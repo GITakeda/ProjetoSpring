@@ -10,7 +10,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface ProgramaMapper {
 
-    @Mapping(target = "active",constant = "true")
+//    @Mapping(target = "active",constant = "true")
     Programa toPrograma(ProgramaDTO programaDTO);
     ProgramaDTO toProgramaDTO(Programa programa);
 }

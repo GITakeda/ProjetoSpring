@@ -15,6 +15,6 @@ public interface MentoriaMapper {
 
     MentoriaDTO toMentoriaDTO(Mentoria mentoria);
 
-    @Mapping(target = "active",constant = "true")
+//    @Mapping(target = "active",constant = "true")
     Mentoria toMentoria(MentoriaDTO mentoriaDTO) throws NotFoundException;
 }

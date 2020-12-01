@@ -8,9 +8,9 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
 public class Mentoria {
 
     @Id
@@ -27,4 +27,46 @@ public class Mentoria {
 
     @Column(columnDefinition = "BIT(1) default 1")
     private Boolean active;
+
+    public Mentoria() {
+    }
+
+    public Mentoria(Long id, Aluno aluno, Mentor mentor, Boolean active) {
+        this.id = id;
+        this.aluno = aluno;
+        this.mentor = mentor;
+        this.active = active;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Aluno getAluno() {
+        return aluno;
+    }
+
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
+    }
+
+    public Mentor getMentor() {
+        return mentor;
+    }
+
+    public void setMentor(Mentor mentor) {
+        this.mentor = mentor;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }

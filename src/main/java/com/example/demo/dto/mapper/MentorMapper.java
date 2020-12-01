@@ -10,7 +10,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface MentorMapper {
 
-    @Mapping(target = "active",constant = "true")
+//    @Mapping(target = "active",constant = "true")
     Mentor toMentor(MentorDTO mentorDTO);
     MentorDTO toMentorDTO(Mentor mentor);
 }

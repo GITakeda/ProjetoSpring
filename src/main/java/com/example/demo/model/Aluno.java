@@ -11,9 +11,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@Data
 public class Aluno {
 
     @Id
@@ -29,4 +29,55 @@ public class Aluno {
 
     @Column(columnDefinition = "BIT(1) default 1")
     private Boolean active;
+
+    public Aluno() {
+    }
+
+    public Aluno(Long id, Programa programa, String nome, String classe, Boolean active) {
+        this.id = id;
+        this.programa = programa;
+        this.nome = nome;
+        this.classe = classe;
+        this.active = active;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Programa getPrograma() {
+        return programa;
+    }
+
+    public void setPrograma(Programa programa) {
+        this.programa = programa;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getClasse() {
+        return classe;
+    }
+
+    public void setClasse(String classe) {
+        this.classe = classe;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
