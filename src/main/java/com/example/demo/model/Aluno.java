@@ -31,6 +31,7 @@ public class Aluno {
     private Boolean active;
 
     public Aluno() {
+        this.active = true;
     }
 
     public Aluno(Long id, Programa programa, String nome, String classe, Boolean active) {

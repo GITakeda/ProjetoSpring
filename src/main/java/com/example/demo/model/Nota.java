@@ -37,6 +37,7 @@ public class Nota {
     private Boolean active;
 
     public Nota() {
+        this.active = true;
     }
 
     public Nota(Long id, Mentoria mentoria, Materia materia, LocalDate data, Double pontuacao, Boolean active) {

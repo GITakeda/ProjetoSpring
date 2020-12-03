@@ -28,6 +28,7 @@ public class Programa {
     private Boolean active;
 
     public Programa() {
+        this.active = true;
     }
 
     public Programa(Long id, String nome, String ano, Boolean active) {

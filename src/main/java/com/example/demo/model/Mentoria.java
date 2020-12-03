@@ -29,6 +29,7 @@ public class Mentoria {
     private Boolean active;
 
     public Mentoria() {
+        this.active = true;
     }
 
     public Mentoria(Long id, Aluno aluno, Mentor mentor, Boolean active) {

@@ -25,6 +25,7 @@ public class Materia {
     private Boolean active;
 
     public Materia() {
+        this.active = true;
     }
 
     public Materia(Long id, String nome, String descricao, Boolean active) {

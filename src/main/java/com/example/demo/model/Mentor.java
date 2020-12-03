@@ -31,6 +31,7 @@ public class Mentor {
     }
 
     public Mentor() {
+        this.active = true;
     }
 
     public Long getId() {
